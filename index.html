@@ -429,83 +429,7 @@
 
     <input type="file" id="imageUploader" accept="image/*" style="display:none">
 
-    ลโปรไฟล์ของตัวเองได้แล้ว');
-                closeLoginModal();
-                checkLoginStatus();
-            } else {
-                alert('รหัสผ่านหรือชื่อผู้ใช้ไม่ถูกต้อง!');
-            }
-        }
-
-        window.logout = function() {
-            sessionStorage.removeItem('loggedInUser');
-            alert('ออกจากระบบเรียบร้อยแล้ว');
-            checkLoginStatus();
-        }
-
-        function checkLoginStatus() {
-            let loggedInUser = sessionStorage.getItem('loggedInUser');
-            let statusText = document.getElementById('login-status-text');
-            if (loggedInUser) {
-                statusText.innerHTML = `เข้าสู่ระบบในฐานะ: ${loggedInUser} <br><a href="javascript:void(0)" onclick="logout()" style="color:#ff5555; text-decoration:underline; display:inline-block; margin-top:5px;">ออกจากระบบ</a>`;
-            } else {
-                statusText.innerHTML = "";
-            }
-        }
-
-        window.showProfile = function(userId, defaultImg, fullName, nickname, defaultIg) {
-            currentViewingId = userId;
-            let userData = globalUsersData[userId] || {};
-            let customImg = userData.image || defaultImg;
-            let customIg = userData.ig || defaultIg;
-
-            document.getElementById('modalImg').src = customImg;
-            document.getElementById('modalName').innerText = fullName;
-            document.getElementById('modalNickname').innerHTML = "<strong>ชื่อเล่น:</strong> " + nickname;
-            document.getElementById('modalIgText').innerText = customIg;
-            
-            let loggedInUser = sessionStorage.getItem('loggedInUser');
-            let editBox = document.getElementById('edit-controls');
-            if (loggedInUser === userId) {
-                editBox.style.display = 'block';
-            } else {
-                editBox.style.display = 'none';
-            }
-            document.getElementById('profileModal').style.display = 'flex';
-        }
-
-        window.closeProfile = function() { document.getElementById('profileModal').style.display = 'none'; }
-
-        window.editIgName = async function() {
-            let newIg = prompt("กรุณากรอกชื่อ Instagram ใหม่ของคุณ (ไม่ต้องใส่ @):");
-            if (newIg !== null && newIg.trim() !== "") {
-                const igName = newIg.trim();
-                try {
-                    await setDoc(doc(db, "students", currentViewingId), { ig: igName }, { merge: true });
-                    alert("อัปเดตชื่อ IG สำเร็จ!");
-                } catch (error) {
-                    alert("เกิดข้อผิดพลาดในการบันทึก: " + error.message);
-                }
-            }
-        }
-
-        window.triggerImageUpload = function() {
-            alert("กรุณาใช้รูปภาพสัดส่วน 1:1 หรือขนาด 150x150 px เพื่อความสวยงามของตารางครับ");
-            document.getElementById('imageUploader').click();
-        }
-
-        document.getElementById('imageUploader').addEventListener('change', async function(e) {
-            let file = e.target.files[0];
-            if (!file) return;
-
-            // เช็คขนาดไฟล์ไม่ให้เกิน 2MB ป้องกันโหลดช้า
-            if(file.size > 2 * 1024 * 1024) {
-                alert("ไฟล์รูปภาพมีขนาดใหญ่เกินไป กรุณาเลือกไฟล์ที่เล็กกว่า 2MB ครับ");
-                return;
-            }
-
-            alert("กำลังอัปโหลดรูปภาพเข้าสู่ระบบ กรุณารอสักครู่...");
-    <script type="module">
+        <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
         import { getFirestore, doc, setDoc, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-storage.js";
@@ -618,6 +542,7 @@
         }
         // ... (คงฟังก์ชัน navigateTo, scrollToSection, updateLiveSchedule ไว้เหมือนเดิม)
     </script>
+
 
 </body>
 </html>
