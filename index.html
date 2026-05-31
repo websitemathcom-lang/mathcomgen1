@@ -1,48 +1,664 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-    </head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MATH COM M 5/6</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-dark: #0a0f0d;
+            --neon-green: #00ff88;
+            --neon-cyan: #00ffcc;
+            --card-glass: rgba(16, 28, 22, 0.65);
+            --text-main: #e0f7fa;
+            --neon-orange: #ff9900;
+        }
+
+        body {
+            font-family: 'Prompt', sans-serif;
+            margin: 0;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+            background-image: linear-gradient(rgba(0, 255, 136, 0.03) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(0, 255, 136, 0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+
+        header {
+            padding: 60px 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(0, 255, 136, 0.2);
+            background: radial-gradient(circle at center, rgba(0, 255, 136, 0.1) 0%, transparent 70%);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 3rem;
+            font-weight: 600;
+            color: #ffffff;
+            text-shadow: 0 0 10px var(--neon-green), 0 0 20px var(--neon-green);
+            letter-spacing: 3px;
+            line-height: 1.2;
+        }
+
+        header h1 span {
+            display: block;
+            font-size: 1.8rem;
+            color: var(--neon-cyan);
+            text-shadow: 0 0 10px var(--neon-cyan);
+            margin-top: 5px;
+        }
+
+        header p {
+            color: #ffffff;
+            margin-top: 20px;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        nav {
+            background: rgba(10, 15, 13, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(0, 255, 204, 0.3);
+        }
+
+        nav button {
+            background: transparent;
+            border: none;
+            color: #a3cfb6;
+            font-family: 'Prompt', sans-serif;
+            font-size: 1rem;
+            padding: 18px 25px;
+            transition: all 0.4s ease;
+            position: relative;
+            cursor: pointer;
+        }
+
+        nav button:hover {
+            color: var(--neon-green);
+            text-shadow: 0 0 10px var(--neon-green);
+        }
+
+        nav button::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 50%; width: 0; height: 2px;
+            background: var(--neon-green);
+            transition: all 0.3s ease;
+        }
+
+        nav button:hover::after { width: 80%; left: 10%; }
+
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        h2 {
+            color: #fff;
+            font-size: 1.6rem;
+            text-shadow: 0 0 10px rgba(0, 255, 204, 0.6);
+            display: inline-block;
+            margin-top: 30px;
+            margin-bottom: 25px;
+            position: relative;
+            padding-left: 15px;
+        }
+
+        h2::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 15%; width: 4px; height: 70%;
+            background: var(--neon-cyan);
+            box-shadow: 0 0 10px var(--neon-cyan);
+            border-radius: 2px;
+        }
+
+        .back-btn {
+            background: transparent;
+            color: var(--neon-cyan);
+            border: 1px solid var(--neon-cyan);
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Prompt', sans-serif;
+            transition: all 0.3s;
+            margin-bottom: 20px;
+            font-size: 1rem;
+        }
+
+        .back-btn:hover {
+            background: var(--neon-cyan);
+            color: var(--bg-dark);
+            box-shadow: 0 0 15px var(--neon-cyan);
+        }
+
+        .card-cyber {
+            background: var(--card-glass);
+            border: 1px solid rgba(0, 255, 136, 0.15);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+
+        .live-schedule-box {
+            background: rgba(14, 27, 21, 0.9);
+            border: 2px solid var(--neon-green);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.15);
+        }
+
+        .live-time-display {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--neon-cyan);
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(0, 255, 204, 0.3);
+        }
+
+        .current-subject {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #ffffff;
+            text-shadow: 0 0 15px var(--neon-cyan);
+            margin: 10px 0;
+        }
+
+        .current-details {
+            font-size: 1.2rem;
+            color: var(--neon-green);
+        }
+
+        .weekend-box {
+            font-size: 2.2rem;
+            font-weight: 600;
+            color: var(--neon-orange);
+            text-shadow: 0 0 15px var(--neon-orange);
+            padding: 20px 0;
+        }
+
+        .members-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .member-card {
+            background: var(--card-glass);
+            border: 1px solid rgba(0, 255, 204, 0.1);
+            border-radius: 14px;
+            padding: 22px 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s ease;
+        }
+
+        .member-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--neon-green);
+            background: rgba(16, 40, 28, 0.8);
+        }
+
+        .member-card img {
+            width: 110px;
+            height: 110px;
+            border-radius: 12px;
+            object-fit: cover;
+            margin-bottom: 15px;
+            border: 2px solid rgba(0, 255, 136, 0.3);
+        }
+
+        .modal {
+            display: none; position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(5, 10, 8, 0.95);
+            backdrop-filter: blur(10px); z-index: 999;
+            align-items: center; justify-content: center;
+        }
+
+        .modal-content {
+            background-color: #0e1713;
+            border: 2px solid var(--neon-green);
+            padding: 35px 30px;
+            border-radius: 20px;
+            text-align: center;
+            width: 85%;
+            max-width: 350px;
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.2);
+        }
+
+        .modal-content img {
+            width: 130px; height: 130px; border-radius: 16px; object-fit: cover;
+            border: 3px solid var(--neon-cyan);
+            margin-bottom: 18px;
+        }
+
+        .close-btn {
+            background: transparent; color: var(--neon-green); border: 1px solid var(--neon-green);
+            padding: 10px 20px; margin-top: 25px; border-radius: 8px; cursor: pointer;
+            width: 100%; font-family: 'Prompt', sans-serif; font-size: 1rem;
+        }
+
+        .contact-form input, .contact-form textarea {
+            width: 100%; padding: 14px; margin-bottom: 18px; border: 1px solid rgba(0, 255, 136, 0.2);
+            border-radius: 8px; background-color: rgba(5, 10, 7, 0.8); color: #ffffff;
+            font-family: 'Prompt', sans-serif;
+        }
+
+        .contact-form button {
+            background: linear-gradient(90deg, var(--neon-green), var(--neon-cyan)); color: var(--bg-dark);
+            border: none; padding: 15px; border-radius: 8px; cursor: pointer; width: 100%;
+            font-weight: 600; font-family: 'Prompt', sans-serif; font-size: 1rem;
+        }
+
+        .edit-btn {
+            background: transparent;
+            color: var(--neon-cyan);
+            border: 1px solid var(--neon-cyan);
+            padding: 8px 12px;
+            margin: 5px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: 'Prompt', sans-serif;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+        .edit-btn:hover {
+            background: var(--neon-cyan);
+            color: var(--bg-dark);
+        }
+
+        .login-input {
+            width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid var(--neon-cyan);
+            border-radius: 8px; background-color: rgba(5, 10, 7, 0.8); color: #ffffff;
+            font-family: 'Prompt', sans-serif; box-sizing: border-box; text-align: center;
+        }
+    </style>
+</head>
 <body>
+
+    <div id="home-view">
+        <header>
+            <h1>MATH COM <span>M 5/6</span></h1>
+            <p>ห้องเรียนของเหล่าเพชรดิบ</p>
+        </header>
+
+        <nav>
+            <button onclick="scrollToSection('teacher')">คุณครูประจำชั้น</button>
+            <button onclick="navigateTo('students')">รายชื่อเพื่อนๆ</button>
+            <button onclick="scrollToSection('schedule')">ตารางเรียน</button>
+            <button onclick="scrollToSection('contact')">ฝากข้อความ</button>
+        </nav>
+
+        <div class="container">
+            <h2 id="teacher">คุณครูประจำชั้น</h2>
+            <div class="members-grid">
+                <div class="member-card" onclick="showProfile('Krudaysudlou', 'https://via.placeholder.com/150', 'นายสิริพงษ์ มณีวงศ์', 'ครูเดสุดหล่อของเด็กๆ', '-')">
+                    <img id="card-img-Krudaysudlou" src="https://via.placeholder.com/150" alt="Teacher">
+                    <h3>นายสิริพงษ์ มณีวงศ์</h3>
+                    <p>ครูประจำชั้น</p>
+                </div>
+            </div>
+
+            <h2 id="schedule">ตารางเรียน</h2>
+            
+            <div class="live-schedule-box">
+                <div id="live-time" class="live-time-display">Time line: กำลังโหลดข้อมูล...</div>
+                <div id="live-status">กำลังคำนวณวิชาเรียน...</div>
+            </div>
+
+            <div class="card-cyber" style="text-align: center;">
+                <img src="https://i.postimg.cc/QChRb3hq/1780237114654.png" alt="ตารางเรียนตัวเต็ม" style="max-width:100%; border-radius:12px;">
+            </div>
+
+            <h2 id="contact">ฝากข้อความถึงห้องเรียน</h2>
+            <div class="card-cyber contact-form">
+                <form id="messageForm" action="https://formsubmit.co/websitemathcom@gmail.com" method="POST" onsubmit="return validateForm()">
+                    <input type="text" id="senderName" name="name" placeholder="ชื่อของคุณ">
+                    <textarea name="message" rows="4" placeholder="ข้อความ..." required></textarea>
+                    <button type="submit">ส่งข้อความ</button>
+                </form>
+            </div>
+        </div>
+
+        <div style="text-align: center; padding: 40px 20px; margin-top: 30px; opacity: 0.6;">
+            <a href="javascript:void(0)" onclick="openLoginModal()" style="color: var(--neon-cyan); text-decoration: none; font-size: 0.85rem; letter-spacing: 2px;">ᴍᴀᴛʜᴄᴏᴍ ᴅɪᴡᴀ</a>
+            <div id="login-status-text" style="color: var(--neon-green); font-size: 0.8rem; margin-top: 10px;"></div>
+        </div>
+    </div>
+
+    <div id="students-view" style="display: none;">
+        <div class="container" style="margin-top: 30px;">
+            <button class="back-btn" onclick="navigateTo('home')"><i class="fas fa-arrow-left"></i> กลับหน้าหลัก</button>
+            <br>
+            <h2>รายชื่อนักเรียน (41 คน)</h2>
+            
+            <div class="members-grid">
+                <div class="member-card" onclick="showProfile('No1', 'https://via.placeholder.com/150', 'นายราชาตะวัน โสเกษ', 'ปื้ด', 'ig_username')"><img id="card-img-No1" src="https://via.placeholder.com/150"><h3>เลขที่ 1</h3><p>นายราชาตะวัน โสเกษ</p></div>
+                <div class="member-card" onclick="showProfile('No2', 'https://via.placeholder.com/150', 'นายสุธากร มาศรี', 'กำปั้น', 'ig_username')"><img id="card-img-No2" src="https://via.placeholder.com/150"><h3>เลขที่ 2</h3><p>นายสุธากร มาศรี</p></div>
+                <div class="member-card" onclick="showProfile('No3', 'https://via.placeholder.com/150', 'นายจิรวัฒน์ วัฒนาวานิช', 'นัท', 'ig_username')"><img id="card-img-No3" src="https://via.placeholder.com/150"><h3>เลขที่ 3</h3><p>นายจิรวัฒน์ วัฒนาวานิช</p></div>
+                <div class="member-card" onclick="showProfile('No4', 'https://via.placeholder.com/150', 'นายปฏิภาณ พฤกษชาติ', 'สกาย', 'ig_username')"><img id="card-img-No4" src="https://via.placeholder.com/150"><h3>เลขที่ 4</h3><p>นายปฏิภาณ พฤกษชาติ</p></div>
+                <div class="member-card" onclick="showProfile('No5', 'https://via.placeholder.com/150', 'นายสุภัทร จงสุขกลาง', 'ออโต้', 'ig_username')"><img id="card-img-No5" src="https://via.placeholder.com/150"><h3>เลขที่ 5</h3><p>นายสุภัทร จงสุขกลาง</p></div>
+                <div class="member-card" onclick="showProfile('No6', 'https://via.placeholder.com/150', 'นายอัษฎาวุธ แก้วงามสอง', 'อาร์ท', 'ig_username')"><img id="card-img-No6" src="https://via.placeholder.com/150"><h3>เลขที่ 6</h3><p>นายอัษฎาวุธ แก้วงามสอง</p></div>
+                <div class="member-card" onclick="showProfile('No7', 'https://via.placeholder.com/150', 'นายดนัย ชัยสมบัติ', 'เติ้ล', 'ig_username')"><img id="card-img-No7" src="https://via.placeholder.com/150"><h3>เลขที่ 7</h3><p>นายดนัย ชัยสมบัติ</p></div>
+                <div class="member-card" onclick="showProfile('No8', 'https://via.placeholder.com/150', 'นายธนัตถ์ ทองศรีสุข', 'อาตี้', 'ig_username')"><img id="card-img-No8" src="https://via.placeholder.com/150"><h3>เลขที่ 8</h3><p>นายธนัตถ์ ทองศรีสุข</p></div>
+                <div class="member-card" onclick="showProfile('No9', 'https://via.placeholder.com/150', 'นายธีรพัฒน์ ศรีทานนท์', 'โบ๊ท', 'ig_username')"><img id="card-img-No9" src="https://via.placeholder.com/150"><h3>เลขที่ 9</h3><p>นายธีรพัฒน์ ศรีทานนท์</p></div>
+                <div class="member-card" onclick="showProfile('No10', 'https://via.placeholder.com/150', 'นายกฤตกร พระพา', 'กัส', 'ig_username')"><img id="card-img-No10" src="https://via.placeholder.com/150"><h3>เลขที่ 10</h3><p>นายกฤตกร พระพา</p></div>
+                <div class="member-card" onclick="showProfile('No11', 'https://via.placeholder.com/150', 'นายธีรนันท์ สังธรรม', 'ซันนี่', 'ig_username')"><img id="card-img-No11" src="https://via.placeholder.com/150"><h3>เลขที่ 11</h3><p>นายธีรนันท์ สังธรรม</p></div>
+                <div class="member-card" onclick="showProfile('No12', 'https://via.placeholder.com/150', 'นายธีรศิลป์ คัณทักษ์', 'ก๊อตจิ', 'ig_username')"><img id="card-img-No12" src="https://via.placeholder.com/150"><h3>เลขที่ 12</h3><p>นายธีรศิลป์ คัณทักษ์</p></div>
+                <div class="member-card" onclick="showProfile('No13', 'https://via.placeholder.com/150', 'นายอภิชัย ภวภูตานนท์', 'โซดา', 'ig_username')"><img id="card-img-No13" src="https://via.placeholder.com/150"><h3>เลขที่ 13</h3><p>นายอภิชัย ภวภูตานนท์</p></div>
+                <div class="member-card" onclick="showProfile('No14', 'https://via.placeholder.com/150', 'นางสาวอารีรัตน์ แงหล้า', 'แก้ม', 'ig_username')"><img id="card-img-No14" src="https://via.placeholder.com/150"><h3>เลขที่ 14</h3><p>นางสาวอารีรัตน์ แงหล้า</p></div>
+                <div class="member-card" onclick="showProfile('No15', 'https://via.placeholder.com/150', 'นางสาวปวันรัตน์ สานิพามะณี', 'ป๋อมแป๋ม', 'ig_username')"><img id="card-img-No15" src="https://via.placeholder.com/150"><h3>เลขที่ 15</h3><p>นางสาวปวันรัตน์ สานิพามะณี</p></div>
+                <div class="member-card" onclick="showProfile('No16', 'https://via.placeholder.com/150', 'นางสาวจิราธิป ธีระองค์เจริญ', 'ขนมปัง', 'ig_username')"><img id="card-img-No16" src="https://via.placeholder.com/150"><h3>เลขที่ 16</h3><p>นางสาวจิราธิป ธีระองค์เจริญ</p></div>
+                <div class="member-card" onclick="showProfile('No17', 'https://via.placeholder.com/150', 'นางสาวกิตติยา สนดา', 'เอย', 'ig_username')"><img id="card-img-No17" src="https://via.placeholder.com/150"><h3>เลขที่ 17</h3><p>นางสาวกิตติยา สนดา</p></div>
+                <div class="member-card" onclick="showProfile('No18', 'https://via.placeholder.com/150', 'นางสาวฉัตรตราภร ทุมวรรณ', 'น้ำตาล', 'ig_username')"><img id="card-img-No18" src="https://via.placeholder.com/150"><h3>เลขที่ 18</h3><p>นางสาวฉัตรตราภร ทุมวรรณ</p></div>
+                <div class="member-card" onclick="showProfile('No19', 'https://via.placeholder.com/150', 'นางสาวสุรดา เสนจันตะ', 'แบม', 'ig_username')"><img id="card-img-No19" src="https://via.placeholder.com/150"><h3>เลขที่ 19</h3><p>นางสาวสุรดา เสนจันตะ</p></div>
+                <div class="member-card" onclick="showProfile('No20', 'https://via.placeholder.com/150', 'นางสาวชัญญานุช เพชรหงษ์', 'กาฟิวส์', 'ig_username')"><img id="card-img-No20" src="https://via.placeholder.com/150"><h3>เลขที่ 20</h3><p>นางสาวชัญญานุช เพชรหงษ์</p></div>
+                <div class="member-card" onclick="showProfile('No21', 'https://via.placeholder.com/150', 'นางสาวธัญวรัตม์ ศุภนัตร์', 'ข้าวฟ่าง', 'ig_username')"><img id="card-img-No21" src="https://via.placeholder.com/150"><h3>เลขที่ 21</h3><p>นางสาวธัญวรัตม์ ศุภนัตร์</p></div>
+                <div class="member-card" onclick="showProfile('No22', 'https://via.placeholder.com/150', 'นางสาวปวริศา โคตรภักดี', 'นาเดียร์', 'ig_username')"><img id="card-img-No22" src="https://via.placeholder.com/150"><h3>เลขที่ 22</h3><p>นางสาวปวริศา โคตรภักดี</p></div>
+                <div class="member-card" onclick="showProfile('No23', 'https://via.placeholder.com/150', 'นางสาวพรทิวา นาไฮ', 'สไปร์ท', 'ig_username')"><img id="card-img-No23" src="https://via.placeholder.com/150"><h3>เลขที่ 23</h3><p>นางสาวพรทิวา นาไฮ</p></div>
+                <div class="member-card" onclick="showProfile('No24', 'https://via.placeholder.com/150', 'เด็กหญิงพลอยลดา พีระสกุลวงษ์', 'ข้าว', 'ig_username')"><img id="card-img-No24" src="https://via.placeholder.com/150"><h3>เลขที่ 24</h3><p>เด็กหญิงพลอยลดา พีระสกุลวงษ์</p></div>
+                <div class="member-card" onclick="showProfile('No25', 'https://via.placeholder.com/150', 'นางสาววิษฎา จารัตน์', 'อาย', 'ig_username')"><img id="card-img-No25" src="https://via.placeholder.com/150"><h3>เลขที่ 25</h3><p>นางสาววิษฎา จารัตน์</p></div>
+                <div class="member-card" onclick="showProfile('No26', 'https://via.placeholder.com/150', 'นางสาววริศรา บุญขัน', 'ฟ้าใส', 'ig_username')"><img id="card-img-No26" src="https://via.placeholder.com/150"><h3>เลขที่ 26</h3><p>นางสาววริศรา บุญขัน</p></div>
+                <div class="member-card" onclick="showProfile('No27', 'https://via.placeholder.com/150', 'เด็กหญิงจิรัชยา ไสยสัตย์', 'บิวตี้', 'ig_username')"><img id="card-img-No27" src="https://via.placeholder.com/150"><h3>เลขที่ 27</h3><p>เด็กหญิงจิรัชยา ไสยสัตย์</p></div>
+                <div class="member-card" onclick="showProfile('No28', 'https://via.placeholder.com/150', 'นางสาวธัญลักษณ์ อินพิมพ์', 'คัพเค้ก', 'ig_username')"><img id="card-img-No28" src="https://via.placeholder.com/150"><h3>เลขที่ 28</h3><p>นางสาวธัญลักษณ์ อินพิมพ์</p></div>
+                <div class="member-card" onclick="showProfile('No29', 'https://via.placeholder.com/150', 'นางสาวบุษราคัมย์ มลศิลป์', 'มุ้ย', 'ig_username')"><img id="card-img-No29" src="https://via.placeholder.com/150"><h3>เลขที่ 29</h3><p>นางสาวบุษราคัมย์ มลศิลป์</p></div>
+                <div class="member-card" onclick="showProfile('No30', 'https://via.placeholder.com/150', 'นางสาวพิไลวรรณ กองสำลี', 'ไผ่', 'ig_username')"><img id="card-img-No30" src="https://via.placeholder.com/150"><h3>เลขที่ 30</h3><p>นางสาวพิไลวรรณ กองสำลี</p></div>
+                <div class="member-card" onclick="showProfile('No31', 'https://via.placeholder.com/150', 'เด็กหญิงภัทรธิดา ชาญประไพ', 'แพนเค้ก', 'ig_username')"><img id="card-img-No31" src="https://via.placeholder.com/150"><h3>เลขที่ 31</h3><p>เด็กหญิงภัทรธิดา ชาญประไพ</p></div>
+                <div class="member-card" onclick="showProfile('No32', 'https://via.placeholder.com/150', 'นางสาวรุจิรา เหลื่อมนอก', 'มะเหมี่ยว', 'ig_username')"><img id="card-img-No32" src="https://via.placeholder.com/150"><h3>เลขที่ 32</h3><p>นางสาวรุจิรา เหลื่อมนอก</p></div>
+                <div class="member-card" onclick="showProfile('No33', 'https://via.placeholder.com/150', 'นางสาวกนกนิภา ทาทอง', 'ไอติม', 'ig_username')"><img id="card-img-No33" src="https://via.placeholder.com/150"><h3>เลขที่ 33</h3><p>นางสาวกนกนิภา ทาทอง</p></div>
+                <div class="member-card" onclick="showProfile('No34', 'https://via.placeholder.com/150', 'นางสาวกรรณิการ์ คำมณีจันทร์', 'จ๋า', 'ig_username')"><img id="card-img-No34" src="https://via.placeholder.com/150"><h3>เลขที่ 34</h3><p>นางสาวกรรณิการ์ คำมณีจันทร์</p></div>
+                <div class="member-card" onclick="showProfile('No35', 'https://via.placeholder.com/150', 'นางสาวนัชชนันท์ รินทา', 'มะนาว', 'ig_username')"><img id="card-img-No35" src="https://via.placeholder.com/150"><h3>เลขที่ 35</h3><p>นางสาวนัชชนันท์ รินทา</p></div>
+                <div class="member-card" onclick="showProfile('No36', 'https://via.placeholder.com/150', 'นางสาวนิรัชชา แสงกุดเรือ', 'เฟรช', 'ig_username')"><img id="card-img-No36" src="https://via.placeholder.com/150"><h3>เลขที่ 36</h3><p>นางสาวนิรัชชา แสงกุดเรือ</p></div>
+                <div class="member-card" onclick="showProfile('No37', 'https://via.placeholder.com/150', 'นางสาวภัณฑิลา แดงวงศ์', 'ฟ้า', 'ig_username')"><img id="card-img-No37" src="https://via.placeholder.com/150"><h3>เลขที่ 37</h3><p>นางสาวภัณฑิลา แดงวงศ์</p></div>
+                <div class="member-card" onclick="showProfile('No38', 'https://via.placeholder.com/150', 'นางสาวภัทรานิษย์ ชาวกล้า', 'นิว', 'ig_username')"><img id="card-img-No38" src="https://via.placeholder.com/150"><h3>เลขที่ 38</h3><p>นางสาวภัทรานิษย์ ชาวกล้า</p></div>
+                <div class="member-card" onclick="showProfile('No39', 'https://via.placeholder.com/150', 'นางสาวมนัสพร อุธธา', 'คูเปอร์', 'ig_username')"><img id="card-img-No39" src="https://via.placeholder.com/150"><h3>เลขที่ 39</h3><p>นางสาวมนัสพร อุธธา</p></div>
+                <div class="member-card" onclick="showProfile('No40', 'https://via.placeholder.com/150', 'นางสาววิไลลักษณ์ ถุงแก้ว', 'มายด์', 'ig_username')"><img id="card-img-No40" src="https://via.placeholder.com/150"><h3>เลขที่ 40</h3><p>นางสาววิไลลักษณ์ ถุงแก้ว</p></div>
+                <div class="member-card" onclick="showProfile('No41', 'https://via.placeholder.com/150', 'นางสาวศศิประภา อ้วนพิพิธ', 'มีน', 'ig_username')"><img id="card-img-No41" src="https://via.placeholder.com/150"><h3>เลขที่ 41</h3><p>นางสาวศศิประภา อ้วนพิพิธ</p></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <h3 style="color:var(--neon-green); margin-bottom: 20px;">System Login</h3>
+            <input type="text" id="loginUser" class="login-input" placeholder="Username (เช่น No1)">
+            <input type="password" id="loginPass" class="login-input" placeholder="Password">
+            <button onclick="attemptLogin()" style="width:100%; margin-top:10px; padding:12px; background:var(--neon-green); color:#000; font-weight:bold; border:none; border-radius:8px; cursor:pointer;">เข้าสู่ระบบ</button>
+            <button onclick="closeLoginModal()" style="width:100%; margin-top:10px; padding:12px; background:transparent; color:var(--neon-cyan); border:1px solid var(--neon-cyan); border-radius:8px; cursor:pointer;">ยกเลิก</button>
+        </div>
+    </div>
+
+    <div id="profileModal" class="modal">
+        <div class="modal-content">
+            <img id="modalImg" src="" alt="Profile">
+            <h3 id="modalName" style="color: #ffffff; margin-top: 10px;">ชื่อ-นามสกุล</h3>
+            <p id="modalNickname" style="margin: 8px 0; color: #b2dfdb;"><strong>ชื่อเล่น:</strong> -</p>
+            <p id="modalIg" style="color: var(--neon-green); margin: 12px 0;">
+                <i class="fab fa-instagram" style="margin-right: 6px; color: #ff007f;"></i>
+                <span id="modalIgText">ig_username</span>
+            </p>
+            
+            <div id="edit-controls" style="display: none; margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(0,255,136,0.3);">
+                <p style="color:var(--neon-orange); font-size: 0.85rem; margin-bottom: 10px;">-- เครื่องมือแก้ไขส่วนตัว --</p>
+                <button class="edit-btn" onclick="triggerImageUpload()"><i class="fas fa-camera"></i> เปลี่ยนรูปภาพ</button>
+                <button class="edit-btn" onclick="editIgName()"><i class="fab fa-instagram"></i> เปลี่ยนชื่อ IG</button>
+            </div>
+            
+            <button class="close-btn" onclick="closeProfile()">ปิดหน้าต่าง</button>
+        </div>
+    </div>
+
+    <input type="file" id="imageUploader" accept="image/*" style="display:none">
+
     <script type="module">
-        // 1. นำเข้า Firebase เหมือนเดิม
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
         import { getFirestore, doc, setDoc, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-storage.js";
 
-        // 2. ข้อมูลตารางเรียนของคุณ (ผมยกมาใส่ให้ครบครับ)
-        const scheduleData = {
-            // [ข้อมูลตารางเรียนของคุณที่อยู่ในไฟล์ index(3) จะยังอยู่ครบที่นี่ครับ]
+        const firebaseConfig = {
+            apiKey: "AIzaSyDO5j20OpKKe5FVZYtkRbZX6UwM92NJKSs",
+            authDomain: "mathcomhost.firebaseapp.com",
+            projectId: "mathcomhost",
+            storageBucket: "mathcomhost.firebasestorage.app",
+            messagingSenderId: "882486932259",
+            appId: "1:882486932259:web:e36e6a5ae2dabdb277d296"
         };
 
-        // 3. ฟังก์ชันอื่นๆ ของคุณ (Login, showProfile, updateLiveSchedule)
-        // [ผมคงไว้ทั้งหมด ไม่ได้ลบทิ้งครับ]
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
 
-        // 4. ส่วนอัปโหลดรูปภาพที่ผมปรับปรุงให้ใหม่ (เอาไว้ล่างสุด)
+        // --- 1. ระบบฐานข้อมูลรหัสผ่าน ---
+        const authData = {
+            "Krudaysudlou": "DSevenDeanz", "No1": "33622", "No2": "33763", "No3": "33858", "No4": "34012", "No5": "34022",
+            "No6": "34023", "No7": "34045", "No8": "34088", "No9": "34089", "No10": "36738", "No11": "36739", "No12": "36740",
+            "No13": "36741", "No14": "33605", "No15": "33781", "No16": "33874", "No17": "33903", "No18": "33905", "No19": "33920",
+            "No20": "34027", "No21": "34031", "No22": "34035", "No23": "34036", "No24": "34038", "No25": "34039", "No26": "34040",
+            "No27": "34063", "No28": "34108", "No29": "34110", "No30": "34116", "No31": "34117", "No32": "34119", "No33": "36742",
+            "No34": "36743", "No35": "36744", "No36": "36745", "No37": "36747", "No38": "36748", "No39": "36749", "No40": "36750",
+            "No41": "36751"
+        };
+
+        let currentViewingId = null;
+        let globalUsersData = {}; 
+
+        window.onload = function() {
+            checkLoginStatus();
+            listenToFirebaseRealtime();
+        };
+
+        window.openLoginModal = function() { document.getElementById('loginModal').style.display = 'flex'; }
+        window.closeLoginModal = function() { document.getElementById('loginModal').style.display = 'none'; }
+
+        window.attemptLogin = function() {
+            let user = document.getElementById('loginUser').value.trim();
+            let pass = document.getElementById('loginPass').value.trim();
+            if (authData[user] && authData[user] === pass) {
+                sessionStorage.setItem('loggedInUser', user);
+                alert('เข้าสู่ระบบสำเร็จ! ตอนนี้คุณสามารถแก้ไขข้อมูลโปรไฟล์ของตัวเองได้แล้ว');
+                closeLoginModal();
+                checkLoginStatus();
+            } else {
+                alert('รหัสผ่านหรือชื่อผู้ใช้ไม่ถูกต้อง!');
+            }
+        }
+
+        window.logout = function() {
+            sessionStorage.removeItem('loggedInUser');
+            alert('ออกจากระบบเรียบร้อยแล้ว');
+            checkLoginStatus();
+        }
+
+        function checkLoginStatus() {
+            let loggedInUser = sessionStorage.getItem('loggedInUser');
+            let statusText = document.getElementById('login-status-text');
+            if (loggedInUser) {
+                statusText.innerHTML = `เข้าสู่ระบบในฐานะ: ${loggedInUser} <br><a href="javascript:void(0)" onclick="logout()" style="color:#ff5555; text-decoration:underline; display:inline-block; margin-top:5px;">ออกจากระบบ</a>`;
+            } else {
+                statusText.innerHTML = "";
+            }
+        }
+
+        window.showProfile = function(userId, defaultImg, fullName, nickname, defaultIg) {
+            currentViewingId = userId;
+            let userData = globalUsersData[userId] || {};
+            let customImg = userData.image || defaultImg;
+            let customIg = userData.ig || defaultIg;
+
+            document.getElementById('modalImg').src = customImg;
+            document.getElementById('modalName').innerText = fullName;
+            document.getElementById('modalNickname').innerHTML = "<strong>ชื่อเล่น:</strong> " + nickname;
+            document.getElementById('modalIgText').innerText = customIg;
+            
+            let loggedInUser = sessionStorage.getItem('loggedInUser');
+            let editBox = document.getElementById('edit-controls');
+            if (loggedInUser === userId) {
+                editBox.style.display = 'block';
+            } else {
+                editBox.style.display = 'none';
+            }
+            document.getElementById('profileModal').style.display = 'flex';
+        }
+
+        window.closeProfile = function() { document.getElementById('profileModal').style.display = 'none'; }
+
+        window.editIgName = async function() {
+            let newIg = prompt("กรุณากรอกชื่อ Instagram ใหม่ของคุณ (ไม่ต้องใส่ @):");
+            if (newIg !== null && newIg.trim() !== "") {
+                const igName = newIg.trim();
+                try {
+                    await setDoc(doc(db, "students", currentViewingId), { ig: igName }, { merge: true });
+                    alert("อัปเดตชื่อ IG สำเร็จ!");
+                } catch (error) {
+                    alert("เกิดข้อผิดพลาดในการบันทึก: " + error.message);
+                }
+            }
+        }
+
+        window.triggerImageUpload = function() {
+            alert("กรุณาใช้รูปภาพสัดส่วน 1:1 หรือขนาด 150x150 px เพื่อความสวยงามของตารางครับ");
+            document.getElementById('imageUploader').click();
+        }
+
         document.getElementById('imageUploader').addEventListener('change', async function(e) {
             let file = e.target.files[0];
             if (!file) return;
 
-            const btn = document.querySelector('.edit-btn');
-            const originalText = btn.innerText;
-            btn.innerText = "กำลังอัปโหลด...";
-            btn.disabled = true;
+            // เช็คขนาดไฟล์ไม่ให้เกิน 2MB ป้องกันโหลดช้า
+            if(file.size > 2 * 1024 * 1024) {
+                alert("ไฟล์รูปภาพมีขนาดใหญ่เกินไป กรุณาเลือกไฟล์ที่เล็กกว่า 2MB ครับ");
+                return;
+            }
 
+            alert("กำลังอัปโหลดรูปภาพเข้าสู่ระบบ กรุณารอสักครู่...");
             try {
                 const storageRef = ref(storage, 'profiles/' + currentViewingId);
                 await uploadBytes(storageRef, file);
-                const url = await getDownloadURL(storageRef);
-                await setDoc(doc(db, "students", currentViewingId), { image: url }, { merge: true });
-                alert("อัปโหลดสำเร็จ!");
-            } catch (err) {
-                alert("เกิดข้อผิดพลาด: " + err.message);
-            } finally {
-                btn.innerText = originalText;
-                btn.disabled = false;
+                const downloadUrl = await getDownloadURL(storageRef);
+                
+                await setDoc(doc(db, "students", currentViewingId), { image: downloadUrl }, { merge: true });
+                alert("อัปเดตและแชร์รูปโปรไฟล์สำเร็จแล้ว!");
+            } catch (error) {
+                alert("เกิดข้อผิดพลาดในการอัปโหลด: " + error.message);
+                console.error(error);
             }
         });
-        
-        // [ฟังก์ชัน updateLiveSchedule หรือฟังก์ชันทำงานอื่นๆ ของคุณที่นี่]
+
+        // ดึงข้อมูล Realtime จาก Firestore
+        function listenToFirebaseRealtime() {
+            onSnapshot(collection(db, "students"), (snapshot) => {
+                snapshot.forEach((doc) => {
+                    const id = doc.id;
+                    const data = doc.data();
+                    globalUsersData[id] = data;
+
+                    // อัปเดตรูปในตาราง
+                    if (data.image) {
+                        let cardImg = document.getElementById('card-img-' + id);
+                        if (cardImg) cardImg.src = data.image;
+                    }
+
+                    // อัปเดต Modal ถ้าเปิดค้างอยู่
+                    if (currentViewingId === id) {
+                        if (data.image) document.getElementById('modalImg').src = data.image;
+                        if (data.ig) document.getElementById('modalIgText').innerText = data.ig;
+                    }
+                });
+            });
+        }
+
+        window.validateForm = function() {
+            const senderName = document.getElementById('senderName').value.trim();
+            if (senderName === "") {
+                alert("ไม่สามารถส่งได้เนื่องจาก ไม่พบชื่อผู้ส่ง");
+                return false;
+            }
+            return true;
+        }
+
+        window.navigateTo = function(pageId) {
+            const homeView = document.getElementById('home-view');
+            const studentsView = document.getElementById('students-view');
+            if (pageId === 'students') {
+                homeView.style.display = 'none';
+                studentsView.style.display = 'block';
+            } else {
+                homeView.style.display = 'block';
+                studentsView.style.display = 'none';
+            }
+            window.scrollTo(0, 0);
+        }
+
+        window.scrollToSection = function(id) {
+            document.getElementById('students-view').style.display = 'none';
+            document.getElementById('home-view').style.display = 'block';
+            setTimeout(() => {
+                const element = document.getElementById(id);
+                if (element) element.scrollIntoView({ behavior: 'smooth' });
+            }, 50);
+        }
+
+        const scheduleData = {
+            1: { 1: {name:"ว32282 (ครูสันติ)",room:"ห้อง 528"}, 2: {name:"ว32282 (ครูสันติ)",room:"ห้อง 528"}, 3: {name:"ว30223 (ครูทนงศักดิ์)",room:"ห้อง 423"}, 4: {name:"ว30223 (ครูทนงศักดิ์)",room:"ห้อง 423"}, 5: {name:"ก32901 (ครูนัยนา)",room:"สมุด 1"}, 6: {name:"ค32101 (ครูสุวลี)",room:"ห้อง 731"} },
+            2: { 1: {name:"ว32282 (ครูพิชิตพล)",room:"สน. 1"}, 2: {name:"ค32101 (ครูสุวลี)",room:"ห้อง 731"}, 3: {name:"ส32101 (ครูจุฑามาศ)",room:"ห้อง 823"}, 4: {name:"อ.32101 (ครูเบญจามาศ)",room:"ห้อง 225"}, 5: {name:"อ.30213 (ครู Imani)",room:"ห้อง 647"}, 6: {name:"ค.31205 (ครูสิริพงษ์)",room:"ห้อง 328"} },
+            3: { 1: {name:"ส32102 (ครูอนุวัฒน์)",room:"ห้อง 828"}, 2: {name:"ส32101 (ครูจุฑามาศ)",room:"ห้อง 823"}, 3: {name:"ว.30203 (ครูสุริยะพร)",room:"ห้อง 416"}, 4: {name:"ว.30203 (ครูสุริยะพร)",room:"ห้อง 416"}, 5: {name:"ค.31205 (ครูสิริพงษ์)",room:"ห้อง 328"}, 6: {name:"น.32101 (ครูรจนา)",room:"ห้อง 623"} },
+            4: { 1: {name:"ว.20243 (ครูสิทธิชาติ)",room:"ห้อง 426"}, 2: {name:"ว.20243 (ครูสิทธิชาติ)",room:"ห้อง 426"}, 3: {name:"ว.32102 (ครูมานะ)",room:"ห้อง 521"}, 4: {name:"ว.30223 (ครูทนงศักดิ์)",room:"ห้อง 314"}, 5: {name:"ว.30203 (ครูสุริยะพร)",room:"ห้อง 416"}, 6: {name:"กิจกรรมชุมนุม",room:"ตามประกาศ"} },
+            5: { 1: {name:"ว.30243 (ครูสิทธิชาติ)",room:"ห้อง 313"}, 2: {name:"ค.31205 (ครูสิริพงษ์)",room:"ห้อง 328"}, 3: {name:"ศ.32101 (ครูชฎาภรณ์)",room:"ห้อง 611"}, 4: {name:"อ.32101 (ครูเบญจามาศ)",room:"ห้อง 225"}, 5: {name:"น.32101 (ครูรจนา)",room:"ห้อง 623"}, 6: {name:"กิจกรรม Homeroom",room:"ห้องประจำชั้น"} }
+        };
+
+        function updateLiveSchedule() {
+            const now = new Date();
+            const day = now.getDay(); 
+            const currentTimeInMinutes = (now.getHours() * 60) + now.getMinutes();
+            const daysTh = ["วันอาทิตย์", "วันจันทร์", "วันอังคาร", "วันพุธ", "วันพฤหัสบดี", "วันศุกร์", "วันเสาร์"];
+            document.getElementById('live-time').innerText = `Time line: ${daysTh[day]} เวลา ${now.toLocaleTimeString('th-TH', {hour:'2-digit',minute:'2-digit',second:'2-digit'})} น.`;
+
+            const statusContainer = document.getElementById('live-status');
+            if (day === 0 || day === 6) { statusContainer.innerHTML = `<div class="weekend-box">วันนี้วันหยุดดด</div>`; return; }
+
+            let currentPeriod = 0; let periodTimeText = "";
+            if (currentTimeInMinutes >= 510 && currentTimeInMinutes < 560) { currentPeriod = 1; periodTimeText = "08:30 - 09:20 น."; }
+            else if (currentTimeInMinutes >= 560 && currentTimeInMinutes < 610) { currentPeriod = 2; periodTimeText = "09:20 - 10:10 น."; }
+            else if (currentTimeInMinutes >= 610 && currentTimeInMinutes < 660) { currentPeriod = 3; periodTimeText = "10:10 - 11:00 น."; }
+            else if (currentTimeInMinutes >= 660 && currentTimeInMinutes < 710) { currentPeriod = 4; periodTimeText = "11:00 - 11:50 น."; }
+            else if (currentTimeInMinutes >= 710 && currentTimeInMinutes < 760) { currentPeriod = "BREAK"; periodTimeText = "11:50 - 12:40 น."; }
+            else if (currentTimeInMinutes >= 760 && currentTimeInMinutes < 810) { currentPeriod = 5; periodTimeText = "12:40 - 13:30 น."; }
+            else if (currentTimeInMinutes >= 810 && currentTimeInMinutes < 860) { currentPeriod = 6; periodTimeText = "13:30 - 14:20 น."; }
+            else if (currentTimeInMinutes < 510) { currentPeriod = "BEFORE_SCHOOL"; }
+            else { currentPeriod = "AFTER_SCHOOL"; }
+
+            if (currentPeriod === "BEFORE_SCHOOL") { statusContainer.innerHTML = `<div style="font-size:1.3rem; color:#aaa; padding:10px 0;">ยังไม่ถึงเวลาเข้าเรียน คาบแรกเริ่มเวลา 08:30 น.</div>`; }
+            else if (currentPeriod === "AFTER_SCHOOL") { statusContainer.innerHTML = `<div style="font-size:1.5rem; color:#888; font-weight:600; padding:10px 0;">เลิกเรียนแล้ว</div>`; }
+            else if (currentPeriod === "BREAK") { statusContainer.innerHTML = `<div style="font-size:1.1rem; color:var(--neon-orange);">ช่วงเวลาพักกลางวัน</div><div class="current-subject">ตอนนี้อยู่ในเวลาพักเที่ยง</div><div style="color:#aaa;">เวลา ${periodTimeText}</div>`; }
+            else {
+                const daySchedule = scheduleData[day];
+                if (daySchedule && daySchedule[currentPeriod]) {
+                    const subject = daySchedule[currentPeriod];
+                    statusContainer.innerHTML = `<div style="font-size:1.1rem; color:var(--neon-cyan);">กำลังเรียนอยู่ในขณะนี้ (คาบที่ ${currentPeriod})</div><div class="current-subject">${subject.name}</div><div class="current-details">${subject.room} | เวลา ${periodTimeText}</div>`;
+                } else { statusContainer.innerHTML = `<div style="color:#aaa;">ไม่มีข้อมูลวิชาเรียนในคาบนี้</div>`; }
+            }
+        }
+        updateLiveSchedule();
+        setInterval(updateLiveSchedule, 1000);
     </script>
 </body>
 </html>
-
