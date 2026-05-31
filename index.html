@@ -155,7 +155,6 @@
             box-shadow: 0 4px 20px rgba(0,0,0,0.2);
         }
 
-        /* --- สไตล์ระบบตรวจจับเวลาแบบเก๋ๆ --- */
         .live-schedule-box {
             background: rgba(14, 27, 21, 0.9);
             border: 2px solid var(--neon-green);
@@ -227,7 +226,6 @@
             border: 2px solid rgba(0, 255, 136, 0.3);
         }
 
-        /* --- สไตล์ของระบบ Modal (หน้าต่างลอย) --- */
         .modal {
             display: none; position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -271,7 +269,6 @@
             font-weight: 600; font-family: 'Prompt', sans-serif; font-size: 1rem;
         }
 
-        /* ปุ่มเครื่องมือแก้ไขโปรไฟล์ */
         .edit-btn {
             background: transparent;
             color: var(--neon-cyan);
@@ -289,7 +286,6 @@
             color: var(--bg-dark);
         }
 
-        /* ฟิลด์ใส่ข้อมูลระบบล็อกอิน */
         .login-input {
             width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid var(--neon-cyan);
             border-radius: 8px; background-color: rgba(5, 10, 7, 0.8); color: #ffffff;
@@ -433,34 +429,49 @@
 
     <input type="file" id="imageUploader" accept="image/*" style="display:none">
 
-    <script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
+        import { getFirestore, doc, setDoc, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-storage.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDO5j20OpKKe5FVZYtkRbZX6UwM92NJKSs",
+            authDomain: "mathcomhost.firebaseapp.com",
+            projectId: "mathcomhost",
+            storageBucket: "mathcomhost.firebasestorage.app",
+            messagingSenderId: "882486932259",
+            appId: "1:882486932259:web:e36e6a5ae2dabdb277d296"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+
         // --- 1. ระบบฐานข้อมูลรหัสผ่าน ---
         const authData = {
-            "Krudaysudlou": "DSevenDeanz",
-            "No1": "33622", "No2": "33763", "No3": "33858", "No4": "34012", "No5": "34022",
-            "No6": "34023", "No7": "34045", "No8": "34088", "No9": "34089", "No10": "36738",
-            "No11": "36739", "No12": "36740", "No13": "36741", "No14": "33605", "No15": "33781",
-            "No16": "33874", "No17": "33903", "No18": "33905", "No19": "33920", "No20": "34027",
-            "No21": "34031", "No22": "34035", "No23": "34036", "No24": "34038", "No25": "34039",
-            "No26": "34040", "No27": "34063", "No28": "34108", "No29": "34110", "No30": "34116",
-            "No31": "34117", "No32": "34119", "No33": "36742", "No34": "36743", "No35": "36744",
-            "No36": "36745", "No37": "36747", "No38": "36748", "No39": "36749", "No40": "36750",
+            "Krudaysudlou": "DSevenDeanz", "No1": "33622", "No2": "33763", "No3": "33858", "No4": "34012", "No5": "34022",
+            "No6": "34023", "No7": "34045", "No8": "34088", "No9": "34089", "No10": "36738", "No11": "36739", "No12": "36740",
+            "No13": "36741", "No14": "33605", "No15": "33781", "No16": "33874", "No17": "33903", "No18": "33905", "No19": "33920",
+            "No20": "34027", "No21": "34031", "No22": "34035", "No23": "34036", "No24": "34038", "No25": "34039", "No26": "34040",
+            "No27": "34063", "No28": "34108", "No29": "34110", "No30": "34116", "No31": "34117", "No32": "34119", "No33": "36742",
+            "No34": "36743", "No35": "36744", "No36": "36745", "No37": "36747", "No38": "36748", "No39": "36749", "No40": "36750",
             "No41": "36751"
         };
 
-        // ตรวจสอบสถานะการเข้าสู่ระบบเมื่อโหลดหน้าเว็บ (เพื่อดึงข้อมูลรูปภาพและไอจีที่แก้ไขมาโชว์)
+        let currentViewingId = null;
+        let globalUsersData = {}; 
+
         window.onload = function() {
             checkLoginStatus();
-            loadCustomData();
+            listenToFirebaseRealtime();
         };
 
-        function openLoginModal() { document.getElementById('loginModal').style.display = 'flex'; }
-        function closeLoginModal() { document.getElementById('loginModal').style.display = 'none'; }
+        window.openLoginModal = function() { document.getElementById('loginModal').style.display = 'flex'; }
+        window.closeLoginModal = function() { document.getElementById('loginModal').style.display = 'none'; }
 
-        function attemptLogin() {
+        window.attemptLogin = function() {
             let user = document.getElementById('loginUser').value.trim();
             let pass = document.getElementById('loginPass').value.trim();
-            
             if (authData[user] && authData[user] === pass) {
                 sessionStorage.setItem('loggedInUser', user);
                 alert('เข้าสู่ระบบสำเร็จ! ตอนนี้คุณสามารถแก้ไขข้อมูลโปรไฟล์ของตัวเองได้แล้ว');
@@ -469,6 +480,12 @@
             } else {
                 alert('รหัสผ่านหรือชื่อผู้ใช้ไม่ถูกต้อง!');
             }
+        }
+
+        window.logout = function() {
+            sessionStorage.removeItem('loggedInUser');
+            alert('ออกจากระบบเรียบร้อยแล้ว');
+            checkLoginStatus();
         }
 
         function checkLoginStatus() {
@@ -481,101 +498,95 @@
             }
         }
 
-        function logout() {
-            sessionStorage.removeItem('loggedInUser');
-            alert('ออกจากระบบเรียบร้อยแล้ว');
-            checkLoginStatus();
-        }
-
-        // --- 2. ระบบจัดการรูปภาพ & ข้อมูลส่วนตัว ---
-        let currentViewingId = null;
-
-        function showProfile(userId, defaultImg, fullName, nickname, defaultIg) {
+        window.showProfile = function(userId, defaultImg, fullName, nickname, defaultIg) {
             currentViewingId = userId;
-            
-            // ตรวจสอบว่ามีการเซฟข้อมูลใหม่ใน LocalStorage หรือไม่ ถ้าไม่มีให้ใช้ค่าเริ่มต้น
-            let customImg = localStorage.getItem('img_' + userId) || defaultImg;
-            let customIg = localStorage.getItem('ig_' + userId) || defaultIg;
+            let userData = globalUsersData[userId] || {};
+            let customImg = userData.image || defaultImg;
+            let customIg = userData.ig || defaultIg;
 
             document.getElementById('modalImg').src = customImg;
             document.getElementById('modalName').innerText = fullName;
             document.getElementById('modalNickname').innerHTML = "<strong>ชื่อเล่น:</strong> " + nickname;
             document.getElementById('modalIgText').innerText = customIg;
             
-            // เช็คว่าคนที่ล็อกอินอยู่ เป็นเจ้าของการ์ดใบนี้หรือไม่
             let loggedInUser = sessionStorage.getItem('loggedInUser');
             let editBox = document.getElementById('edit-controls');
             if (loggedInUser === userId) {
-                editBox.style.display = 'block'; // แสดงปุ่มแก้ไข
+                editBox.style.display = 'block';
             } else {
-                editBox.style.display = 'none';  // ซ่อนปุ่มแก้ไข
+                editBox.style.display = 'none';
             }
-
             document.getElementById('profileModal').style.display = 'flex';
         }
 
-        function closeProfile() {
-            document.getElementById('profileModal').style.display = 'none';
-        }
+        window.closeProfile = function() { document.getElementById('profileModal').style.display = 'none'; }
 
-        function editIgName() {
+        window.editIgName = async function() {
             let newIg = prompt("กรุณากรอกชื่อ Instagram ใหม่ของคุณ (ไม่ต้องใส่ @):");
             if (newIg !== null && newIg.trim() !== "") {
-                localStorage.setItem('ig_' + currentViewingId, newIg.trim());
-                document.getElementById('modalIgText').innerText = newIg.trim();
-                alert("อัปเดตชื่อ IG สำเร็จ!");
-            }
-        }
-
-        function triggerImageUpload() {
-            // แจ้งเตือนเรื่องขนาดรูปภาพเมื่อกดปุ่มเปลี่ยนรูปภาพเท่านั้นตามคำขอ
-            alert("กรุณาใช้รูปภาพสัดส่วน 1:1 หรือขนาด 150x150 px เพื่อความสวยงามของตารางครับ");
-            document.getElementById('imageUploader').click();
-        }
-
-        // ระบบแปลงไฟล์รูปที่อัปโหลดเป็น Base64 แล้วเซฟลงเครื่อง
-        document.getElementById('imageUploader').addEventListener('change', function(e) {
-            let file = e.target.files[0];
-            if (!file) return;
-
-            let reader = new FileReader();
-            reader.onload = function(event) {
-                let base64String = event.target.result;
-                
-                // บันทึกรูปภาพลง LocalStorage
-                localStorage.setItem('img_' + currentViewingId, base64String);
-                
-                // อัปเดตรูปในหน้าต่าง Modal ทันที
-                document.getElementById('modalImg').src = base64String;
-                
-                // อัปเดตรูปในการ์ดหน้าตารางรายชื่อทันที
-                let cardImg = document.getElementById('card-img-' + currentViewingId);
-                if(cardImg) cardImg.src = base64String;
-                
-                alert("อัปเดตโปรไฟล์สำเร็จแล้ว!");
-            };
-            reader.readAsDataURL(file);
-        });
-
-        // ดึงข้อมูลรูปภาพของทุกคนที่เคยแก้ไขมาแสดงผลในตารางเพื่อนๆ
-        function loadCustomData() {
-            // โหลดรูปครู
-            let tImg = localStorage.getItem('img_Krudaysudlou');
-            if (tImg) document.getElementById('card-img-Krudaysudlou').src = tImg;
-
-            // โหลดรูปนักเรียนทั้ง 41 คน
-            for (let i = 1; i <= 41; i++) {
-                let sId = 'No' + i;
-                let sImg = localStorage.getItem('img_' + sId);
-                if (sImg) {
-                    let cardImg = document.getElementById('card-img-' + sId);
-                    if (cardImg) cardImg.src = sImg;
+                const igName = newIg.trim();
+                try {
+                    await setDoc(doc(db, "students", currentViewingId), { ig: igName }, { merge: true });
+                    alert("อัปเดตชื่อ IG สำเร็จ!");
+                } catch (error) {
+                    alert("เกิดข้อผิดพลาดในการบันทึก: " + error.message);
                 }
             }
         }
 
-        // --- 3. ระบบฟอร์มและปุ่มนำทาง ---
-        function validateForm() {
+        window.triggerImageUpload = function() {
+            alert("กรุณาใช้รูปภาพสัดส่วน 1:1 หรือขนาด 150x150 px เพื่อความสวยงามของตารางครับ");
+            document.getElementById('imageUploader').click();
+        }
+
+        document.getElementById('imageUploader').addEventListener('change', async function(e) {
+            let file = e.target.files[0];
+            if (!file) return;
+
+            // เช็คขนาดไฟล์ไม่ให้เกิน 2MB ป้องกันโหลดช้า
+            if(file.size > 2 * 1024 * 1024) {
+                alert("ไฟล์รูปภาพมีขนาดใหญ่เกินไป กรุณาเลือกไฟล์ที่เล็กกว่า 2MB ครับ");
+                return;
+            }
+
+            alert("กำลังอัปโหลดรูปภาพเข้าสู่ระบบ กรุณารอสักครู่...");
+            try {
+                const storageRef = ref(storage, 'profiles/' + currentViewingId);
+                await uploadBytes(storageRef, file);
+                const downloadUrl = await getDownloadURL(storageRef);
+                
+                await setDoc(doc(db, "students", currentViewingId), { image: downloadUrl }, { merge: true });
+                alert("อัปเดตและแชร์รูปโปรไฟล์สำเร็จแล้ว!");
+            } catch (error) {
+                alert("เกิดข้อผิดพลาดในการอัปโหลด: " + error.message);
+                console.error(error);
+            }
+        });
+
+        // ดึงข้อมูล Realtime จาก Firestore
+        function listenToFirebaseRealtime() {
+            onSnapshot(collection(db, "students"), (snapshot) => {
+                snapshot.forEach((doc) => {
+                    const id = doc.id;
+                    const data = doc.data();
+                    globalUsersData[id] = data;
+
+                    // อัปเดตรูปในตาราง
+                    if (data.image) {
+                        let cardImg = document.getElementById('card-img-' + id);
+                        if (cardImg) cardImg.src = data.image;
+                    }
+
+                    // อัปเดต Modal ถ้าเปิดค้างอยู่
+                    if (currentViewingId === id) {
+                        if (data.image) document.getElementById('modalImg').src = data.image;
+                        if (data.ig) document.getElementById('modalIgText').innerText = data.ig;
+                    }
+                });
+            });
+        }
+
+        window.validateForm = function() {
             const senderName = document.getElementById('senderName').value.trim();
             if (senderName === "") {
                 alert("ไม่สามารถส่งได้เนื่องจาก ไม่พบชื่อผู้ส่ง");
@@ -584,7 +595,7 @@
             return true;
         }
 
-        function navigateTo(pageId) {
+        window.navigateTo = function(pageId) {
             const homeView = document.getElementById('home-view');
             const studentsView = document.getElementById('students-view');
             if (pageId === 'students') {
@@ -597,7 +608,7 @@
             window.scrollTo(0, 0);
         }
 
-        function scrollToSection(id) {
+        window.scrollToSection = function(id) {
             document.getElementById('students-view').style.display = 'none';
             document.getElementById('home-view').style.display = 'block';
             setTimeout(() => {
@@ -606,8 +617,6 @@
             }, 50);
         }
 
-        // --- 4. ระบบคำนวณคาบเรียนแบบ Real-time (ทำงานด้านหลัง) ---
-        // (ตารางเรียนวัน-เวลา ยังทำงานปกติเหมือนโค้ดก่อนหน้า 100%)
         const scheduleData = {
             1: { 1: {name:"ว32282 (ครูสันติ)",room:"ห้อง 528"}, 2: {name:"ว32282 (ครูสันติ)",room:"ห้อง 528"}, 3: {name:"ว30223 (ครูทนงศักดิ์)",room:"ห้อง 423"}, 4: {name:"ว30223 (ครูทนงศักดิ์)",room:"ห้อง 423"}, 5: {name:"ก32901 (ครูนัยนา)",room:"สมุด 1"}, 6: {name:"ค32101 (ครูสุวลี)",room:"ห้อง 731"} },
             2: { 1: {name:"ว32282 (ครูพิชิตพล)",room:"สน. 1"}, 2: {name:"ค32101 (ครูสุวลี)",room:"ห้อง 731"}, 3: {name:"ส32101 (ครูจุฑามาศ)",room:"ห้อง 823"}, 4: {name:"อ.32101 (ครูเบญจามาศ)",room:"ห้อง 225"}, 5: {name:"อ.30213 (ครู Imani)",room:"ห้อง 647"}, 6: {name:"ค.31205 (ครูสิริพงษ์)",room:"ห้อง 328"} },
@@ -650,29 +659,6 @@
         }
         updateLiveSchedule();
         setInterval(updateLiveSchedule, 1000);
-        <script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
-
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyDO5j20OpKKe5FVZYtkRbZX6UwM92NJKSs",
-    authDomain: "mathcomhost.firebaseapp.com",
-    projectId: "mathcomhost",
-    storageBucket: "mathcomhost.firebasestorage.app",
-    messagingSenderId: "882486932259",
-    appId: "1:882486932259:web:e36e6a5ae2dabdb277d296",
-    measurementId: "G-H5Q6GFD3N7"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-</script>
     </script>
 </body>
 </html>
